@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Battery Passport — Arianee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   CSS CUSTOM PROPERTIES & RESET
+   ═══════════════════════════════════════════ */
+:root {
+  --primary: #0B1F3F;
+  --primary-light: #162d54;
+  --primary-lighter: #1e3a6a;
+  --accent: #00D4AA;
+  --accent-light: #00e8bb;
+  --accent-dark: #00b892;
+  --accent-glow: rgba(0, 212, 170, 0.15);
+  --bg: #F8F9FC;
+  --bg-card: #FFFFFF;
+  --bg-elevated: #FFFFFF;
+  --text: #0B1F3F;
+  --text-secondary: #5A6478;
+  --text-tertiary: #8E95A5;
+  --border: #E8EBF0;
+  --border-light: #F0F2F5;
+  --shadow-sm: 0 1px 2px rgba(11,31,63,0.04);
+  --shadow-md: 0 4px 12px rgba(11,31,63,0.06);
+  --shadow-lg: 0 8px 32px rgba(11,31,63,0.08);
+  --shadow-xl: 0 16px 48px rgba(11,31,63,0.10);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+[data-theme="dark"] {
+  --primary: #E8EBF0;
+  --primary-light: #c8cdd6;
+  --bg: #0A0F1A;
+  --bg-card: #111827;
+  --bg-elevated: #1A2235;
+  --text: #E8EBF0;
+  --text-secondary: #8E95A5;
+  --text-tertiary: #5A6478;
+  --border: #1E2A3E;
+  --border-light: #162235;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.4);
+  --shadow-xl: 0 16px 48px rgba(0,0,0,0.5);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background var(--transition), color var(--transition);
+}
+
+/* ═══════════════════════════════════════════
+   HEADER
+   ═══════════════════════════════════════════ */
+.header {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.85);
+}
+
+[data-theme="dark"] .header {
+  background: rgba(17,24,39,0.9);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #0B1F3F, #00D4AA);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-theme="dark"] .logo-icon {
+  background: linear-gradient(135deg, #00D4AA, #00b892);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lang-select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  font-family: var(--font);
+}
+
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+  color: var(--text);
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+
+/* ═══════════════════════════════════════════
+   PASSPORT HERO
+   ═══════════════════════════════════════════ */
+.hero {
+  background: linear-gradient(135deg, #0B1F3F 0%, #162d54 50%, #0B1F3F 100%);
+  padding: 40px 24px 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0,212,170,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.passport-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,212,170,0.12);
+  border: 1px solid rgba(0,212,170,0.25);
+  border-radius: 100px;
+  padding: 6px 14px;
+  margin-bottom: 16px;
+}
+
+.passport-badge .dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,212,170,0.4); }
+  50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(0,212,170,0); }
+}
+
+.passport-badge span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hero h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.passport-did {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.passport-did code {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  background: rgba(255,255,255,0.06);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0,212,170,0.15);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+
+/* ═══════════════════════════════════════════
+   TAB NAVIGATION
+   ═══════════════════════════════════════════ */
+.tab-nav-wrapper {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 64px;
+  z-index: 90;
+}
+
+.tab-nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tab-nav::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 14px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+  transition: color var(--transition);
+  font-family: var(--font);
+}
+
+.tab-btn:hover { color: var(--text); }
+
+.tab-btn.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 18px;
+  right: 18px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px 2px 0 0;
+}
+
+/* ═══════════════════════════════════════════
+   MAIN CONTENT
+   ═══════════════════════════════════════════ */
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+
+.tab-content {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════
+   CARDS
+   ═══════════════════════════════════════════ */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.card-icon.teal { background: var(--accent-glow); }
+.card-icon.navy { background: rgba(11,31,63,0.08); }
+[data-theme="dark"] .card-icon.navy { background: rgba(255,255,255,0.08); }
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.card-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ═══════════════════════════════════════════
+   GRID LAYOUTS
+   ═══════════════════════════════════════════ */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 901px) and (max-width: 1100px) {
+  .grid-3 { grid-template-columns: 1fr 1fr; }
+  .grid-4 { grid-template-columns: 1fr 1fr; }
+}
+
+/* ═══════════════════════════════════════════
+   SUMMARY / OVERVIEW
+   ═══════════════════════════════════════════ */
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 900px) {
+  .summary-grid { grid-template-columns: 1fr; }
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.info-row:last-child { border-bottom: none; }
+
+.info-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  text-align: right;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-pill.green {
+  background: rgba(0,212,170,0.1);
+  color: var(--accent-dark);
+}
+
+[data-theme="dark"] .status-pill.green {
+  color: var(--accent);
+}
+
+.qr-area {
+  background: var(--bg);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-md);
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.qr-placeholder {
+  width: 120px;
+  height: 120px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  grid-template-rows: repeat(5,1fr);
+  gap: 2px;
+  padding: 8px;
+}
+
+.qr-cell {
+  border-radius: 2px;
+  background: var(--text);
+  opacity: 0.15;
+}
+
+.qr-cell.filled { opacity: 0.8; }
+
+.qr-label {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ═══════════════════════════════════════════
+   SECTION HEADING
+   ═══════════════════════════════════════════ */
+.section-heading {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-heading .icon {
+  font-size: 22px;
+}
+
+/* ═══════════════════════════════════════════
+   DATA FIELDS - GENERAL TAB
+   ═══════════════════════════════════════════ */
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .field-grid { grid-template-columns: 1fr; }
+}
+
+.field {
+  padding: 16px;
+  background: var(--bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+}
+
+.field-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.field-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ═══════════════════════════════════════════
+   LOCKED SECTION - MATERIAL COMPOSITION
+   ═══════════════════════════════════════════ */
+.locked-section {
+  text-align: center;
+  padding: 80px 40px;
+}
+
+.lock-icon {
+  width: 80px;
+  height: 80px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  font-size: 32px;
+}
+
+.locked-section h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.locked-section p {
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  border: none;
+  font-family: var(--font);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #0B1F3F;
+}
+
+.btn-primary:hover {
+  background: var(--accent-light);
+  box-shadow: 0 4px 16px rgba(0,212,170,0.3);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-outline:hover {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+
+/* ═══════════════════════════════════════════
+   PERFORMANCE GAUGES
+   ═══════════════════════════════════════════ */
+.gauge-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.gauge-svg { width: 140px; height: 140px; }
+
+.gauge-label {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.gauge-sublabel {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.stat-card {
+  padding: 20px;
+  background: var(--bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.stat-value .unit {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--border-light);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  transition: width 1s ease;
+}
+
+/* ═══════════════════════════════════════════
+   COMPLIANCE BADGES
+   ═══════════════════════════════════════════ */
+.compliance-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  background: var(--bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  transition: all var(--transition);
+}
+
+.compliance-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+
+.compliance-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.compliance-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.compliance-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-dark);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+[data-theme="dark"] .link-btn { color: var(--accent); }
+
+.link-btn:hover { color: var(--accent-light); }
+
+/* ═══════════════════════════════════════════
+   SUPPLY CHAIN CARDS
+   ═══════════════════════════════════════════ */
+.supply-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: all var(--transition);
+  cursor: pointer;
+}
+
+.supply-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.supply-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.supply-card-icon.green { background: rgba(0,212,170,0.1); }
+.supply-card-icon.blue { background: rgba(59,130,246,0.1); }
+.supply-card-icon.purple { background: rgba(139,92,246,0.1); }
+.supply-card-icon.orange { background: rgba(249,115,22,0.1); }
+
+.supply-card h4 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.supply-card p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  flex-grow: 1;
+}
+
+.supply-card .link-btn {
+  margin-top: auto;
+}
+
+/* ═══════════════════════════════════════════
+   DONUT CHARTS (SVG)
+   ═══════════════════════════════════════════ */
+.donut-chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.donut-svg {
+  width: 160px;
+  height: 160px;
+  transform: rotate(-90deg);
+}
+
+.donut-center-label {
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  margin-top: -100px;
+  margin-bottom: 86px;
+  position: relative;
+  z-index: 1;
+}
+
+.donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════
+   CARBON FOOTPRINT
+   ═══════════════════════════════════════════ */
+.carbon-hero {
+  text-align: center;
+  padding: 40px;
+  background: linear-gradient(135deg, rgba(0,212,170,0.05), rgba(11,31,63,0.03));
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.carbon-value {
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+}
+
+.carbon-unit {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.performance-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #0B1F3F, #162d54);
+  color: var(--accent);
+  font-size: 24px;
+  font-weight: 800;
+  margin-top: 16px;
+}
+
+[data-theme="dark"] .performance-badge {
+  background: linear-gradient(135deg, #00D4AA, #00b892);
+  color: #0B1F3F;
+}
+
+/* ═══════════════════════════════════════════
+   CIRCULARITY
+   ═══════════════════════════════════════════ */
+.circularity-info {
+  background: var(--bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-top: 24px;
+}
+
+.circularity-info h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.circularity-info p, .circularity-info li {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.circularity-info ul {
+  padding-left: 20px;
+  margin-top: 8px;
+}
+
+/* ═══════════════════════════════════════════
+   ECONOMIC OPERATOR
+   ═══════════════════════════════════════════ */
+.operator-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: var(--bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  margin-top: 20px;
+}
+
+.operator-logo {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #0B1F3F, #162d54);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.operator-info h4 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.operator-info p {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ═══════════════════════════════════════════
+   SUMMARY REPORT DONUTS ROW
+   ═══════════════════════════════════════════ */
+.summary-donuts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.summary-donut-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.summary-donut-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (max-width: 600px) {
+  .header-inner { padding: 0 16px; }
+  .hero { padding: 24px 16px; }
+  .hero h1 { font-size: 22px; }
+  .main { padding: 20px 16px 48px; }
+  .card { padding: 20px; }
+  .tab-btn { padding: 12px 14px; font-size: 12px; }
+  .summary-grid { grid-template-columns: 1fr; }
+  .carbon-value { font-size: 36px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     HEADER
+     ═══════════════════════════════════════════ -->
+<header class="header">
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="6" y="2" width="12" height="20" rx="2"/>
+          <line x1="10" y1="0" x2="10" y2="2"/>
+          <line x1="14" y1="0" x2="14" y2="2"/>
+          <line x1="6" y1="10" x2="18" y2="10"/>
+        </svg>
+      </div>
+      Battery Passport
+    </a>
+    <div class="header-right">
+      <select class="lang-select">
+        <option>EN</option>
+        <option>FR</option>
+        <option>DE</option>
+      </select>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+        <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+     ═══════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="passport-badge">
+      <span class="dot"></span>
+      <span>Verified Battery Passport</span>
+    </div>
+    <h1>EV High-Performance Battery Module</h1>
+    <div class="passport-did">
+      <code>did:web:arianee.passport:ev-bat-2024-001</code>
+      <span class="verified-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>
+        Verified
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     TAB NAVIGATION
+     ═══════════════════════════════════════════ -->
+<nav class="tab-nav-wrapper">
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="overview">Overview</button>
+    <button class="tab-btn" data-tab="general">General</button>
+    <button class="tab-btn" data-tab="materials">Material Composition</button>
+    <button class="tab-btn" data-tab="performance">Performance</button>
+    <button class="tab-btn" data-tab="compliance">Compliance</button>
+    <button class="tab-btn" data-tab="supply">Supply Chain</button>
+    <button class="tab-btn" data-tab="circularity">Circularity</button>
+    <button class="tab-btn" data-tab="carbon">Carbon Footprint</button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     MAIN CONTENT
+     ═══════════════════════════════════════════ -->
+<main class="main">
+
+  <!-- ─── OVERVIEW TAB ─── -->
+  <div class="tab-content active" id="tab-overview">
+    <div class="summary-grid">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon teal">🔋</div>
+          <div>
+            <div class="card-title">Passport Summary</div>
+            <div class="card-subtitle">Battery identification & key data</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Passport ID</span>
+          <span class="info-value" style="font-size:12px;font-family:monospace;opacity:0.8;">did:web:arianee.passport:ev-bat-2024-001</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Battery Model</span>
+          <span class="info-value">NMC-EV 75 Gen4</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Serial Number</span>
+          <span class="info-value">BAT-2024-NMC-00847</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Category</span>
+          <span class="info-value">Electric Vehicle (EV)</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Weight</span>
+          <span class="info-value">438 kg</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Manufactured</span>
+          <span class="info-value">2024-09-15</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Manufacturer</span>
+          <span class="info-value">Arianee Cell Technologies</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Status</span>
+          <span class="info-value"><span class="status-pill green">● Original</span></span>
+        </div>
+        <div class="operator-section">
+          <div class="operator-logo">A</div>
+          <div class="operator-info">
+            <h4>Arianee Cell Technologies GmbH</h4>
+            <p>Economic Operator — EU Reg. No. DE-BAT-2024-0032</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:24px;">
+          <div class="card-header">
+            <div class="card-icon navy">📱</div>
+            <div>
+              <div class="card-title">QR Code</div>
+              <div class="card-subtitle">Scan to verify passport</div>
+            </div>
+          </div>
+          <div class="qr-area">
+            <div class="qr-placeholder" id="qr-grid"></div>
+            <span class="qr-label">Scan to verify</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon teal">📊</div>
+            <div>
+              <div class="card-title">Quick Stats</div>
+              <div class="card-subtitle">Key performance indicators</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="stat-card">
+              <div class="stat-value">75<span class="unit"> kWh</span></div>
+              <div class="stat-label">Capacity</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">92<span class="unit">%</span></div>
+              <div class="stat-label">State of Health</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">137<span class="unit"> g</span></div>
+              <div class="stat-label">CO₂e/kWh</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" style="font-size:24px;">B</div>
+              <div class="stat-label">Perf. Class</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary donuts -->
+    <h3 class="section-heading"><span class="icon">📈</span> Summary Report</h3>
+    <div class="summary-donuts">
+      <div class="summary-donut-card">
+        <h4>Carbon Footprint</h4>
+        <div class="donut-chart-container">
+          <svg class="donut-svg" viewBox="0 0 160 160" id="summary-carbon-donut"></svg>
+          <div class="donut-center-label">137<br><span style="font-size:11px;color:var(--text-secondary);font-weight:400;">gCO₂e/kWh</span></div>
+          <div class="donut-legend">
+            <div class="legend-item"><span class="legend-dot" style="background:#00D4AA;"></span>Raw Materials 65%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#0B1F3F;"></span>Production 22%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#3B82F6;"></span>Distribution 7.3%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#8B5CF6;"></span>Recycling 5.8%</div>
+          </div>
+        </div>
+      </div>
+      <div class="summary-donut-card">
+        <h4>Recycled Nickel</h4>
+        <div class="donut-chart-container">
+          <svg class="donut-svg" viewBox="0 0 160 160" id="summary-nickel-donut"></svg>
+          <div class="donut-center-label">12%<br><span style="font-size:11px;color:var(--text-secondary);font-weight:400;">Recycled</span></div>
+          <div class="donut-legend">
+            <div class="legend-item"><span class="legend-dot" style="background:#00D4AA;"></span>Pre-consumer 4%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#3B82F6;"></span>Post-consumer 8%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#E8EBF0;"></span>Primary 88%</div>
+          </div>
+        </div>
+      </div>
+      <div class="summary-donut-card">
+        <h4>Recycled Cobalt</h4>
+        <div class="donut-chart-container">
+          <svg class="donut-svg" viewBox="0 0 160 160" id="summary-cobalt-donut"></svg>
+          <div class="donut-center-label">18%<br><span style="font-size:11px;color:var(--text-secondary);font-weight:400;">Recycled</span></div>
+          <div class="donut-legend">
+            <div class="legend-item"><span class="legend-dot" style="background:#00D4AA;"></span>Pre-consumer 6%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#3B82F6;"></span>Post-consumer 12%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#E8EBF0;"></span>Primary 82%</div>
+          </div>
+        </div>
+      </div>
+      <div class="summary-donut-card">
+        <h4>Recycled Lithium</h4>
+        <div class="donut-chart-container">
+          <svg class="donut-svg" viewBox="0 0 160 160" id="summary-lithium-donut"></svg>
+          <div class="donut-center-label">8%<br><span style="font-size:11px;color:var(--text-secondary);font-weight:400;">Recycled</span></div>
+          <div class="donut-legend">
+            <div class="legend-item"><span class="legend-dot" style="background:#00D4AA;"></span>Pre-consumer 3%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#3B82F6;"></span>Post-consumer 5%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#E8EBF0;"></span>Primary 92%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── GENERAL TAB ─── -->
+  <div class="tab-content" id="tab-general">
+    <h3 class="section-heading"><span class="icon">📋</span> General Information</h3>
+    <div class="card" style="margin-bottom:24px;">
+      <div class="field-grid">
+        <div class="field">
+          <div class="field-label">Battery Name</div>
+          <div class="field-value">EV High-Performance Battery Module</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Model Number</div>
+          <div class="field-value">NMC-EV 75 Gen4</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Serial Number</div>
+          <div class="field-value">BAT-2024-NMC-00847</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Category</div>
+          <div class="field-value">🔌 Electric Vehicle (EV)</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Weight</div>
+          <div class="field-value">438 kg</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Manufactured Date</div>
+          <div class="field-value">📅 2024-09-15</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Facility Location</div>
+          <div class="field-value">📍 Salzgitter, Germany</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Manufacturer</div>
+          <div class="field-value">Arianee Cell Technologies GmbH</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Status</div>
+          <div class="field-value"><span class="status-pill green">● Original</span></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Chemistry</div>
+          <div class="field-value">NMC 811 (Nickel-Manganese-Cobalt)</div>
+        </div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon navy">🏢</div>
+          <div>
+            <div class="card-title">Economic Operator</div>
+            <div class="card-subtitle">Entity placing the battery on the market</div>
+          </div>
+        </div>
+        <div class="operator-section" style="margin-top:0;">
+          <div class="operator-logo">A</div>
+          <div class="operator-info">
+            <h4>Arianee Cell Technologies GmbH</h4>
+            <p>Industriestraße 42, 38239 Salzgitter, Germany<br>EU Reg. No. DE-BAT-2024-0032</p>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon teal">📱</div>
+          <div>
+            <div class="card-title">Digital Identity</div>
+            <div class="card-subtitle">Passport verification</div>
+          </div>
+        </div>
+        <div class="qr-area" style="height:180px;">
+          <div class="qr-placeholder" id="qr-grid-2"></div>
+          <span class="qr-label">Scan to verify</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── MATERIAL COMPOSITION TAB ─── -->
+  <div class="tab-content" id="tab-materials">
+    <h3 class="section-heading"><span class="icon">⚗️</span> Material Composition</h3>
+    <div class="card">
+      <div class="locked-section">
+        <div class="lock-icon">🔒</div>
+        <h3>Privileged Access Required</h3>
+        <p>Material composition data contains sensitive supply chain information. Authentication is required to view detailed chemical and material breakdown.</p>
+        <button class="btn btn-primary" onclick="alert('Authentication flow would open here.\nThis is a demo prototype.')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Authenticate to Access
+        </button>
+        <p style="margin-top:16px;font-size:12px;color:var(--text-tertiary);">Requires EU Battery Regulation authorized credentials</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PERFORMANCE TAB ─── -->
+  <div class="tab-content" id="tab-performance">
+    <h3 class="section-heading"><span class="icon">⚡</span> Performance & Durability</h3>
+    <div class="grid-3" style="margin-bottom:24px;">
+      <div class="card">
+        <div class="gauge-container">
+          <svg class="gauge-svg" viewBox="0 0 140 140" id="soh-gauge"></svg>
+          <div class="gauge-label">State of Health</div>
+          <div class="gauge-sublabel">92% — Excellent</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="gauge-container">
+          <svg class="gauge-svg" viewBox="0 0 140 140" id="efficiency-gauge"></svg>
+          <div class="gauge-label">Round-trip Efficiency</div>
+          <div class="gauge-sublabel">96% — Outstanding</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="gauge-container">
+          <svg class="gauge-svg" viewBox="0 0 140 140" id="cycle-gauge"></svg>
+          <div class="gauge-label">Cycle Life Used</div>
+          <div class="gauge-sublabel">247 / 1,500 cycles</div>
+        </div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon teal">📊</div>
+          <div>
+            <div class="card-title">Key Specifications</div>
+            <div class="card-subtitle">Rated performance data</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Rated Capacity</span>
+          <span class="info-value">75 kWh</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Nominal Voltage</span>
+          <span class="info-value">400 V</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Energy Density</span>
+          <span class="info-value">171 Wh/kg</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Max Charge Rate</span>
+          <span class="info-value">150 kW (2C)</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Internal Resistance</span>
+          <span class="info-value">12.3 mΩ</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon navy">🌡️</div>
+          <div>
+            <div class="card-title">Operating Conditions</div>
+            <div class="card-subtitle">Rated temperature ranges</div>
+          </div>
+        </div>
+        <div style="margin-bottom:20px;">
+          <div class="info-row">
+            <span class="info-label">Operating Range</span>
+            <span class="info-value">-20°C to +55°C</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Optimal Range</span>
+            <span class="info-value">15°C to 35°C</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Storage Temp</span>
+            <span class="info-value">-30°C to +60°C</span>
+          </div>
+        </div>
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Capacity Retention at -10°C</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:78%;"></div></div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">78% of rated capacity</div>
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px;margin-top:16px;">Capacity Retention at +45°C</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:94%;"></div></div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">94% of rated capacity</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── COMPLIANCE TAB ─── -->
+  <div class="tab-content" id="tab-compliance">
+    <h3 class="section-heading"><span class="icon">✅</span> Compliance & Certifications</h3>
+    <div class="grid-2">
+      <div class="compliance-card">
+        <div class="compliance-icon">🇪🇺</div>
+        <div>
+          <div class="compliance-title">EU Declaration of Conformity</div>
+          <div class="compliance-desc">Regulation (EU) 2023/1542 — Battery Regulation compliant. Covers safety, labelling, and performance requirements.</div>
+          <a href="#" class="link-btn" onclick="event.preventDefault()">View Declaration →</a>
+        </div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-icon">📋</div>
+        <div>
+          <div class="compliance-title">Conformity Assessment</div>
+          <div class="compliance-desc">Module D assessment by TÜV Rheinland. Certificate No. CB-2024-BAT-EU-0847.</div>
+          <a href="#" class="link-btn" onclick="event.preventDefault()">View Assessment →</a>
+        </div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-icon">🔬</div>
+        <div>
+          <div class="compliance-title">UN 38.3 Transport Test</div>
+          <div class="compliance-desc">Lithium battery transport safety certified per UN Manual of Tests and Criteria, Section 38.3.</div>
+          <a href="#" class="link-btn" onclick="event.preventDefault()">View Certificate →</a>
+        </div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-icon">🛡️</div>
+        <div>
+          <div class="compliance-title">IEC 62660 Safety</div>
+          <div class="compliance-desc">Secondary lithium-ion cells for propulsion — safety requirements per IEC 62660-2:2018.</div>
+          <a href="#" class="link-btn" onclick="event.preventDefault()">View Certificate →</a>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:24px;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon teal">🏅</div>
+          <div>
+            <div class="card-title">Certification Badges</div>
+            <div class="card-subtitle">Active certifications for this battery</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border-light);font-size:13px;font-weight:600;">
+            <span style="color:var(--accent);">✓</span> CE Marking
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border-light);font-size:13px;font-weight:600;">
+            <span style="color:var(--accent);">✓</span> EU Battery Regulation
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border-light);font-size:13px;font-weight:600;">
+            <span style="color:var(--accent);">✓</span> UN 38.3
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border-light);font-size:13px;font-weight:600;">
+            <span style="color:var(--accent);">✓</span> IEC 62660
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border-light);font-size:13px;font-weight:600;">
+            <span style="color:var(--accent);">✓</span> REACH Compliant
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border-light);font-size:13px;font-weight:600;">
+            <span style="color:var(--accent);">✓</span> RoHS Compliant
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SUPPLY CHAIN TAB ─── -->
+  <div class="tab-content" id="tab-supply">
+    <h3 class="section-heading"><span class="icon">🔗</span> Supply Chain Due Diligence</h3>
+    <div class="grid-2">
+      <div class="supply-card">
+        <div class="supply-card-icon green">🌱</div>
+        <h4>Sustainability Report</h4>
+        <p>Comprehensive environmental impact assessment covering raw material sourcing, manufacturing processes, and life cycle analysis.</p>
+        <a href="#" class="link-btn" onclick="event.preventDefault()">Download Report (PDF) →</a>
+      </div>
+      <div class="supply-card">
+        <div class="supply-card-icon blue">🔍</div>
+        <h4>Due Diligence Report</h4>
+        <p>Supply chain due diligence per OECD guidance, covering conflict minerals, human rights, and responsible sourcing practices.</p>
+        <a href="#" class="link-btn" onclick="event.preventDefault()">Download Report (PDF) →</a>
+      </div>
+      <div class="supply-card">
+        <div class="supply-card-icon purple">📊</div>
+        <h4>Third Party Audit</h4>
+        <p>Independent verification by Bureau Veritas. Audit scope: raw material traceability, manufacturing quality, ESG compliance.</p>
+        <a href="#" class="link-btn" onclick="event.preventDefault()">View Audit Summary →</a>
+      </div>
+      <div class="supply-card">
+        <div class="supply-card-icon orange">📑</div>
+        <h4>EU Taxonomy Report</h4>
+        <p>Alignment with EU Taxonomy Regulation for sustainable economic activities. Climate change mitigation contribution analysis.</p>
+        <a href="#" class="link-btn" onclick="event.preventDefault()">Download Report (PDF) →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── CIRCULARITY TAB ─── -->
+  <div class="tab-content" id="tab-circularity">
+    <h3 class="section-heading"><span class="icon">♻️</span> Circularity & Recycled Content</h3>
+    <div class="grid-4" style="margin-bottom:24px;">
+      <div class="card" style="text-align:center;">
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:16px;">Nickel</h4>
+        <div class="donut-chart-container">
+          <svg class="donut-svg" viewBox="0 0 160 160" id="circ-nickel"></svg>
+          <div class="donut-center-label">12%<br><span style="font-size:11px;color:var(--text-secondary);font-weight:400;">Recycled</span></div>
+          <div class="donut-legend">
+            <div class="legend-item"><span class="legend-dot" style="background:#00D4AA;"></span>Pre-consumer 4%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#3B82F6;"></span>Post-consumer 8%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#E8EBF0;"></span>Primary 88%</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:16px;">Cobalt</h4>
+        <div class="donut-chart-container">
+          <svg class="donut-svg" viewBox="0 0 160 160" id="circ-cobalt"></svg>
+          <div class="donut-center-label">18%<br><span style="font-size:11px;color:var(--text-secondary);font-weight:400;">Recycled</span></div>
+          <div class="donut-legend">
+            <div class="legend-item"><span class="legend-dot" style="background:#00D4AA;"></span>Pre-consumer 6%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#3B82F6;"></span>Post-consumer 12%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#E8EBF0;"></span>Primary 82%</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:16px;">Lithium</h4>
+        <div class="donut-chart-container">
+          <svg class="donut-svg" viewBox="0 0 160 160" id="circ-lithium"></svg>
+          <div class="donut-center-label">8%<br><span style="font-size:11px;color:var(--text-secondary);font-weight:400;">Recycled</span></div>
+          <div class="donut-legend">
+            <div class="legend-item"><span class="legend-dot" style="background:#00D4AA;"></span>Pre-consumer 3%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#3B82F6;"></span>Post-consumer 5%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#E8EBF0;"></span>Primary 92%</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:16px;">Lead</h4>
+        <div class="donut-chart-container">
+          <svg class="donut-svg" viewBox="0 0 160 160" id="circ-lead"></svg>
+          <div class="donut-center-label">85%<br><span style="font-size:11px;color:var(--text-secondary);font-weight:400;">Recycled</span></div>
+          <div class="donut-legend">
+            <div class="legend-item"><span class="legend-dot" style="background:#00D4AA;"></span>Pre-consumer 25%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#3B82F6;"></span>Post-consumer 60%</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#E8EBF0;"></span>Primary 15%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="circularity-info">
+        <h4>♻️ Separate Collection Information</h4>
+        <p>This battery must be collected separately from other waste streams at end of life. It is subject to extended producer responsibility (EPR) under EU Battery Regulation (EU) 2023/1542.</p>
+        <ul>
+          <li>Do not dispose with household waste</li>
+          <li>Return to authorized collection point or dealer</li>
+          <li>Battery contains lithium — handle with care</li>
+          <li>Producer take-back program available at manufacturer facilities</li>
+        </ul>
+      </div>
+      <div class="circularity-info">
+        <h4>🔧 End-of-Life Instructions</h4>
+        <p>Follow these guidelines for safe handling and recycling of this battery at end of life:</p>
+        <ul>
+          <li>Discharge to safe voltage level before transport</li>
+          <li>Transport per ADR/IMDG dangerous goods regulations</li>
+          <li>Only qualified professionals should disassemble</li>
+          <li>Recycling efficiency target: ≥ 70% by weight (2026 EU target)</li>
+          <li>Second-life assessment recommended before recycling</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── CARBON FOOTPRINT TAB ─── -->
+  <div class="tab-content" id="tab-carbon">
+    <h3 class="section-heading"><span class="icon">🌍</span> Carbon Footprint</h3>
+    <div class="carbon-hero">
+      <div style="font-size:13px;color:var(--text-secondary);font-weight:500;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Total Carbon Footprint</div>
+      <div class="carbon-value">137</div>
+      <div class="carbon-unit">gCO₂e per kWh</div>
+      <div class="performance-badge">B</div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-top:8px;">Carbon Footprint Performance Class</div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon teal">📊</div>
+          <div>
+            <div class="card-title">Lifecycle Breakdown</div>
+            <div class="card-subtitle">CO₂ emissions by lifecycle stage</div>
+          </div>
+        </div>
+        <div class="donut-chart-container" style="margin-bottom:16px;">
+          <svg class="donut-svg" viewBox="0 0 160 160" id="carbon-main-donut" style="width:200px;height:200px;"></svg>
+          <div class="donut-center-label" style="margin-top:-130px;margin-bottom:116px;">137<br><span style="font-size:11px;color:var(--text-secondary);font-weight:400;">gCO₂e/kWh</span></div>
+        </div>
+        <div style="display:grid;gap:12px;">
+          <div class="info-row">
+            <span class="info-label"><span class="legend-dot" style="background:#00D4AA;display:inline-block;margin-right:8px;"></span>Raw Material Extraction</span>
+            <span class="info-value">89.05 g (65%)</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label"><span class="legend-dot" style="background:#0B1F3F;display:inline-block;margin-right:8px;"></span>Main Production</span>
+            <span class="info-value">30.14 g (22%)</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label"><span class="legend-dot" style="background:#3B82F6;display:inline-block;margin-right:8px;"></span>Distribution</span>
+            <span class="info-value">10.00 g (7.3%)</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label"><span class="legend-dot" style="background:#8B5CF6;display:inline-block;margin-right:8px;"></span>Recycling</span>
+            <span class="info-value">7.95 g (5.8%)</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:24px;">
+          <div class="card-header">
+            <div class="card-icon navy">🏷️</div>
+            <div>
+              <div class="card-title">Performance Classification</div>
+              <div class="card-subtitle">EU Carbon Footprint Class</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:20px;">
+            <div style="flex:1;padding:12px;border-radius:var(--radius-sm);text-align:center;font-weight:700;font-size:18px;background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.2);">A</div>
+            <div style="flex:1;padding:12px;border-radius:var(--radius-sm);text-align:center;font-weight:700;font-size:18px;background:var(--accent-glow);color:var(--accent);border:2px solid var(--accent);">B</div>
+            <div style="flex:1;padding:12px;border-radius:var(--radius-sm);text-align:center;font-weight:700;font-size:18px;background:var(--bg);color:var(--text-tertiary);border:1px solid var(--border-light);">C</div>
+            <div style="flex:1;padding:12px;border-radius:var(--radius-sm);text-align:center;font-weight:700;font-size:18px;background:var(--bg);color:var(--text-tertiary);border:1px solid var(--border-light);">D</div>
+            <div style="flex:1;padding:12px;border-radius:var(--radius-sm);text-align:center;font-weight:700;font-size:18px;background:var(--bg);color:var(--text-tertiary);border:1px solid var(--border-light);">E</div>
+          </div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">This battery achieves Performance Class <strong>B</strong>, placing it in the second-highest tier for carbon footprint efficiency among EV batteries in the European market.</p>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon teal">📄</div>
+            <div>
+              <div class="card-title">Carbon Footprint Study</div>
+              <div class="card-subtitle">Methodology & references</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Standard</span>
+            <span class="info-value">ISO 14067:2018</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Methodology</span>
+            <span class="info-value">Product Environmental Footprint (PEF)</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Study Date</span>
+            <span class="info-value">2024-08-01</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Verifier</span>
+            <span class="info-value">TÜV SÜD</span>
+          </div>
+          <div style="margin-top:16px;">
+            <a href="#" class="btn btn-outline" onclick="event.preventDefault()" style="width:100%;justify-content:center;">
+              📥 Download Full Carbon Study (PDF)
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════ -->
+<footer style="border-top:1px solid var(--border);padding:24px;text-align:center;font-size:12px;color:var(--text-tertiary);background:var(--bg-card);">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span>Battery Passport powered by <strong style="color:var(--accent);">Arianee</strong></span>
+    <span>EU Battery Regulation (EU) 2023/1542 compliant</span>
+    <span>Protocol version 1.0.0</span>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════
+   DARK MODE TOGGLE
+   ═══════════════════════════════════════════ */
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.querySelector('.sun-icon').style.display = isDark ? 'block' : 'none';
+  document.querySelector('.moon-icon').style.display = isDark ? 'none' : 'block';
+  // Re-render charts for dark mode
+  renderAllCharts();
+}
+
+/* ═══════════════════════════════════════════
+   TAB NAVIGATION
+   ═══════════════════════════════════════════ */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ═══════════════════════════════════════════
+   QR CODE GENERATOR (DECORATIVE)
+   ═══════════════════════════════════════════ */
+function generateQR(containerId) {
+  const grid = document.getElementById(containerId);
+  if (!grid) return;
+  grid.innerHTML = '';
+  const pattern = [
+    1,1,1,0,1, 1,0,1,0,1, 1,1,1,0,0, 0,1,0,1,1, 1,0,0,1,1
+  ];
+  for (let i = 0; i < 25; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'qr-cell' + (pattern[i] ? ' filled' : '');
+    grid.appendChild(cell);
+  }
+}
+generateQR('qr-grid');
+generateQR('qr-grid-2');
+
+/* ═══════════════════════════════════════════
+   SVG DONUT CHART HELPER
+   ═══════════════════════════════════════════ */
+function createDonut(svgId, segments, radius, strokeWidth) {
+  const svg = document.getElementById(svgId);
+  if (!svg) return;
+  svg.innerHTML = '';
+  const cx = 80, cy = 80;
+  const r = radius || 60;
+  const sw = strokeWidth || 18;
+  const circumference = 2 * Math.PI * r;
+  let offset = 0;
+
+  // Background circle
+  const bg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  bg.setAttribute('cx', cx);
+  bg.setAttribute('cy', cy);
+  bg.setAttribute('r', r);
+  bg.setAttribute('fill', 'none');
+  bg.setAttribute('stroke', document.documentElement.getAttribute('data-theme') === 'dark' ? '#1E2A3E' : '#F0F2F5');
+  bg.setAttribute('stroke-width', sw);
+  svg.appendChild(bg);
+
+  segments.forEach(seg => {
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    const dashLen = (seg.pct / 100) * circumference;
+    circle.setAttribute('cx', cx);
+    circle.setAttribute('cy', cy);
+    circle.setAttribute('r', r);
+    circle.setAttribute('fill', 'none');
+    circle.setAttribute('stroke', seg.color);
+    circle.setAttribute('stroke-width', sw);
+    circle.setAttribute('stroke-dasharray', `${dashLen} ${circumference - dashLen}`);
+    circle.setAttribute('stroke-dashoffset', `${-offset}`);
+    circle.setAttribute('stroke-linecap', 'round');
+    circle.style.transition = 'stroke-dasharray 1s ease, stroke-dashoffset 1s ease';
+    svg.appendChild(circle);
+    offset += dashLen;
+  });
+}
+
+/* ═══════════════════════════════════════════
+   GAUGE CHART HELPER
+   ═══════════════════════════════════════════ */
+function createGauge(svgId, pct, color) {
+  const svg = document.getElementById(svgId);
+  if (!svg) return;
+  svg.innerHTML = '';
+  const cx = 70, cy = 70, r = 56, sw = 12;
+  const circumference = 2 * Math.PI * r;
+  const dashLen = (pct / 100) * circumference;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+  // Background
+  const bg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  bg.setAttribute('cx', cx); bg.setAttribute('cy', cy); bg.setAttribute('r', r);
+  bg.setAttribute('fill', 'none');
+  bg.setAttribute('stroke', isDark ? '#1E2A3E' : '#F0F2F5');
+  bg.setAttribute('stroke-width', sw);
+  svg.appendChild(bg);
+
+  // Fill
+  const fill = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  fill.setAttribute('cx', cx); fill.setAttribute('cy', cy); fill.setAttribute('r', r);
+  fill.setAttribute('fill', 'none');
+  fill.setAttribute('stroke', color || '#00D4AA');
+  fill.setAttribute('stroke-width', sw);
+  fill.setAttribute('stroke-dasharray', `${dashLen} ${circumference - dashLen}`);
+  fill.setAttribute('stroke-dashoffset', `${circumference * 0.25}`);
+  fill.setAttribute('stroke-linecap', 'round');
+  fill.style.transition = 'stroke-dasharray 1s ease';
+  svg.appendChild(fill);
+
+  // Center text
+  const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  text.setAttribute('x', cx); text.setAttribute('y', cy + 2);
+  text.setAttribute('text-anchor', 'middle');
+  text.setAttribute('dominant-baseline', 'middle');
+  text.setAttribute('fill', isDark ? '#E8EBF0' : '#0B1F3F');
+  text.setAttribute('font-size', '24');
+  text.setAttribute('font-weight', '800');
+  text.setAttribute('font-family', 'Inter, sans-serif');
+  text.textContent = pct + '%';
+  svg.appendChild(text);
+}
+
+/* ═══════════════════════════════════════════
+   RENDER ALL CHARTS
+   ═══════════════════════════════════════════ */
+function renderAllCharts() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const primaryColor = isDark ? '#E8EBF0' : '#0B1F3F';
+  const bgColor = isDark ? '#2a3548' : '#E8EBF0';
+
+  // Carbon donuts
+  const carbonSegments = [
+    { pct: 65, color: '#00D4AA' },
+    { pct: 22, color: primaryColor },
+    { pct: 7.3, color: '#3B82F6' },
+    { pct: 5.8, color: '#8B5CF6' }
+  ];
+  createDonut('summary-carbon-donut', carbonSegments);
+  createDonut('carbon-main-donut', carbonSegments);
+
+  // Recycled content donuts
+  const nickelSegs = [
+    { pct: 4, color: '#00D4AA' },
+    { pct: 8, color: '#3B82F6' },
+    { pct: 88, color: bgColor }
+  ];
+  const cobaltSegs = [
+    { pct: 6, color: '#00D4AA' },
+    { pct: 12, color: '#3B82F6' },
+    { pct: 82, color: bgColor }
+  ];
+  const lithiumSegs = [
+    { pct: 3, color: '#00D4AA' },
+    { pct: 5, color: '#3B82F6' },
+    { pct: 92, color: bgColor }
+  ];
+  const leadSegs = [
+    { pct: 25, color: '#00D4AA' },
+    { pct: 60, color: '#3B82F6' },
+    { pct: 15, color: bgColor }
+  ];
+
+  createDonut('summary-nickel-donut', nickelSegs);
+  createDonut('summary-cobalt-donut', cobaltSegs);
+  createDonut('summary-lithium-donut', lithiumSegs);
+
+  createDonut('circ-nickel', nickelSegs);
+  createDonut('circ-cobalt', cobaltSegs);
+  createDonut('circ-lithium', lithiumSegs);
+  createDonut('circ-lead', leadSegs);
+
+  // Performance gauges
+  createGauge('soh-gauge', 92, '#00D4AA');
+  createGauge('efficiency-gauge', 96, '#3B82F6');
+  createGauge('cycle-gauge', 16, '#8B5CF6'); // 247/1500 ≈ 16%
+}
+
+// Initial render
+renderAllCharts();
+</script>
+</body>
+</html>
